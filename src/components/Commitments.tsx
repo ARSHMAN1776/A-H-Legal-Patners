@@ -1,4 +1,4 @@
-﻿import {
+import {
   ChatCircleText,
   LockKey,
   PhoneCall,
@@ -15,29 +15,29 @@ const icons = {
 
 export function Commitments() {
   return (
-    <section aria-label="Our commitments" className="border-t border-line bg-ink py-20 md:py-28">
+    <section aria-label="Our commitments" className="border-t border-line bg-ink py-12 sm:py-16 md:py-20">
       <div className="mx-auto max-w-[1400px] px-5 md:px-10">
         {/* Section header */}
-        <div className="mb-14 flex items-center gap-4">
-          <span className="h-px w-8 bg-gilt opacity-70" aria-hidden />
+        <div className="mb-8 sm:mb-12 flex items-center gap-4">
+          <span className="h-px w-6 sm:w-8 bg-gilt opacity-70" aria-hidden />
           <span className="t-label text-gilt">Our commitments</span>
         </div>
 
         <ul
           data-stagger
-          className="grid gap-14 sm:grid-cols-2 lg:grid-cols-4 lg:gap-0 lg:divide-x lg:divide-line"
+          className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4 lg:gap-0 lg:divide-x lg:divide-line"
         >
           {commitments.map((c, i) => {
             const Icon = icons[c.icon];
             return (
-              <li key={c.title} className="group lg:px-9 lg:first:pl-0 lg:last:pr-0">
+              <li key={c.title} className="group rounded-xl border border-line/40 bg-forest/15 p-5 sm:p-6 lg:border-none lg:bg-transparent lg:p-0 lg:px-9 lg:first:pl-0 lg:last:pr-0">
                 <div className="flex items-start justify-between">
-                  <Icon size={30} weight="light" className="text-gilt" aria-hidden />
+                  <Icon size={26} weight="light" className="text-gilt" aria-hidden />
                   <span className="t-label text-stone/40">{String(i + 1).padStart(2, "0")}</span>
                 </div>
-                <h3 className="display mt-7 text-[1.65rem] leading-[1.15]">{c.title}</h3>
-                <p className="mt-3 max-w-[22rem] text-[0.9875rem] leading-[1.7]">{c.body}</p>
-                <div className="mt-6 h-px w-0 bg-gilt transition-[width] duration-700 ease-lux group-hover:w-12" aria-hidden />
+                <h3 className="display mt-4 sm:mt-5 text-[1.4rem] sm:text-[1.55rem] leading-[1.2]">{c.title}</h3>
+                <p className="mt-2.5 text-[0.9375rem] leading-[1.65] text-stone">{c.body}</p>
+                <div className="mt-4 h-px w-0 bg-gilt transition-[width] duration-700 ease-lux group-hover:w-10" aria-hidden />
               </li>
             );
           })}

@@ -28,8 +28,8 @@ export function Footer() {
       </div>
 
       {/* Main Footer Directory */}
-      <div className="mx-auto max-w-[1400px] px-5 pt-20 pb-16 md:px-10 md:pt-24">
-        <div className="grid gap-12 lg:grid-cols-12 lg:gap-10">
+      <div className="mx-auto max-w-[1400px] px-5 pt-12 pb-10 sm:pt-16 sm:pb-12 md:px-10 md:pt-20 md:pb-16">
+        <div className="grid gap-8 sm:gap-10 lg:grid-cols-12 lg:gap-10">
           {/* Column 1: Brand & Credentials */}
           <div className="lg:col-span-4 flex flex-col justify-between">
             <div>
@@ -164,12 +164,12 @@ export function Footer() {
         </div>
 
         {/* Disclaimer Card */}
-        <div className="mt-16 rounded-xl border border-line/40 bg-forest/10 p-5 text-[0.8125rem] leading-[1.7] text-stone/75">
+        <div className="mt-8 sm:mt-12 rounded-xl border border-line/40 bg-forest/10 p-4 sm:p-5 text-[0.78rem] sm:text-[0.8125rem] leading-[1.65] text-stone/75">
           <p>{disclaimer}</p>
         </div>
 
         {/* Bottom Bar: Copyright & Back to Top */}
-        <div className="mt-10 flex flex-col sm:flex-row items-center justify-between gap-6 border-t border-line/60 pt-7 text-[0.8125rem] text-stone/70">
+        <div className="mt-6 sm:mt-8 flex flex-col sm:flex-row items-center justify-between gap-4 border-t border-line/60 pt-6 text-[0.78rem] sm:text-[0.8125rem] text-stone/70">
           <p translate="no">
             &copy; {firm.year} {firm.name}. All rights reserved. Admitted before Lahore High Court.
           </p>
