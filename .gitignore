@@ -1,0 +1,10 @@
+node_modules
+dist
+*.tsbuildinfo
+.env*.local
+.playwright-mcp
+.claude
+
+# brand build working files (the finished files in brand/out are kept)
+brand/build
+brand/__pycache__

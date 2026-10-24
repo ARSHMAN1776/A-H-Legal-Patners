@@ -1,0 +1,94 @@
+import { useState } from "react";
+import { Link } from "react-router-dom";
+import { faq } from "@/lib/content";
+import { cn } from "@/lib/cn";
+
+export function Faq() {
+  const [open, setOpen] = useState<number | null>(0);
+
+  return (
+    <section id="questions" className="bg-ink py-32 md:py-44">
+      <div className="mx-auto grid max-w-[1400px] gap-14 px-5 md:px-10 lg:grid-cols-12 lg:gap-8">
+        <div className="lg:col-span-4">
+          <div className="lg:sticky lg:top-32">
+            {/* Section label */}
+            <div className="mb-8 flex items-center gap-4">
+              <span className="h-px w-8 bg-gilt opacity-70" aria-hidden />
+              <span className="t-label text-gilt">FAQ</span>
+            </div>
+
+            <h2 className="display t-section" data-split>
+              Before you call
+            </h2>
+            <p data-reveal className="mt-7 max-w-sm">
+              Straight answers to what most people ask first. If yours is not here, write to us.
+            </p>
+
+            <div data-reveal className="mt-10">
+              <Link
+                to="/questions"
+                className="t-label inline-flex items-center gap-3 text-gilt hover:text-gilt-soft transition-colors duration-500"
+              >
+                <span>Browse all questions & guidance</span>
+                <span className="h-px w-8 bg-current" aria-hidden />
+              </Link>
+            </div>
+          </div>
+        </div>
+
+        <ul data-stagger className="lg:col-span-7 lg:col-start-6">
+          {faq.map((item, i) => {
+            const isOpen = open === i;
+            return (
+              <li key={item.q} className="border-b border-line first:border-t">
+                <h3>
+                  <button
+                    type="button"
+                    id={`faq-button-${i}`}
+                    aria-expanded={isOpen}
+                    aria-controls={`faq-panel-${i}`}
+                    onClick={() => setOpen(isOpen ? null : i)}
+                    className="group flex w-full items-center justify-between gap-8 py-7 text-left"
+                  >
+                    <span
+                      className={cn(
+                        "display text-[clamp(1.4rem,2.2vw,1.9rem)] leading-[1.25] transition-colors duration-700 ease-lux",
+                        isOpen ? "text-ivory" : "text-ivory/80 group-hover:text-ivory",
+                      )}
+                    >
+                      {item.q}
+                    </span>
+                    <span aria-hidden className="relative block size-5 shrink-0">
+                      <span className="absolute left-0 top-1/2 h-px w-full -translate-y-1/2 bg-gilt" />
+                      <span
+                        className={cn(
+                          "absolute left-1/2 top-0 h-full w-px -translate-x-1/2 bg-gilt",
+                          "transition-transform duration-700 ease-lux",
+                          isOpen && "rotate-90",
+                        )}
+                      />
+                    </span>
+                  </button>
+                </h3>
+                <div
+                  id={`faq-panel-${i}`}
+                  role="region"
+                  aria-labelledby={`faq-button-${i}`}
+                  inert={!isOpen}
+                  className={cn(
+                    "grid transition-[grid-template-rows,opacity] duration-700 ease-lux",
+                    isOpen ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0",
+                  )}
+                >
+                  <div className="overflow-hidden">
+                    <p className="max-w-xl pb-8 text-[0.9875rem] leading-[1.75]">{item.a}</p>
+                  </div>
+                </div>
+              </li>
+            );
+          })}
+        </ul>
+      </div>
+    </section>
+  );
+}

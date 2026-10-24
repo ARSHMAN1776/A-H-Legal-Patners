@@ -1,0 +1,396 @@
+@import "tailwindcss";
+
+/* ------------------------------------------------------------------
+   Design tokens
+   Palette  : library green ink, ivory type, one champagne accent.
+   Shape    : containers are square, interactive controls are pills,
+              imagery and plates use the arch (the firm's signature).
+   Z-index  : grain 30 / nav 40 / menu 50 / intro 60 (see :root).
+------------------------------------------------------------------- */
+@theme static {
+  --font-display: "Cormorant Garamond", Georgia, "Times New Roman", serif;
+  --font-urdu: "Noto Nastaliq Urdu", "Jameel Noori Nastaleeq", "Urdu Typesetting", serif;
+  --font-sans: "Geist Variable", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+
+  --color-deep: #070f0d;
+  --color-ink: #0a1512;
+  --color-forest: #0f201b;
+  --color-moss: #152b24;
+  --color-ivory: #ede8dc;
+  --color-stone: #a9b1a6;
+  --color-gilt: #c6a96b;
+  --color-gilt-soft: #d9c18f;
+  --color-coral: #e8978b;
+  --color-line: rgb(237 232 220 / 0.12);
+  --color-line-strong: rgb(237 232 220 / 0.24);
+
+  --ease-lux: cubic-bezier(0.32, 0.72, 0, 1);
+  --ease-expo: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+:root {
+  --z-grain: 30;
+  --z-nav: 40;
+  --z-menu: 50;
+  --z-intro: 60;
+}
+
+html {
+  background: var(--color-ink);
+  color: var(--color-ivory);
+  color-scheme: dark;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background: var(--color-ink);
+  font-family: var(--font-sans);
+  font-size: 1.0625rem;
+  min-height: 100dvh;
+  line-height: 1.75;
+  color: var(--color-stone);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  overflow-x: clip;
+}
+
+::selection {
+  background: var(--color-gilt);
+  color: var(--color-ink);
+}
+
+/* Base layer, so components (e.g. underline form fields) can restyle their own focus */
+@layer base {
+  a,
+  button,
+  input,
+  select,
+  textarea,
+  label,
+  summary {
+    touch-action: manipulation;
+  }
+  html {
+    -webkit-tap-highlight-color: rgb(198 169 107 / 0.18);
+  }
+  :focus-visible {
+    outline: 2px solid var(--color-gilt);
+    outline-offset: 4px;
+  }
+}
+
+/* Lenis (smooth scroll) recommended base styles */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+.lenis.lenis-stopped {
+  overflow: clip;
+}
+
+/* Film-grain texture. Fixed, non-interactive, never on scrolling content. */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-grain);
+  pointer-events: none;
+  opacity: 0.045;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 .7 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+}
+
+/* Component classes live in the components layer so utility classes
+   (text-gilt, pr-8, ...) always win over them. */
+@layer components {
+/* Urdu (Nastaliq) needs generous line height so the script is not clipped */
+.urdu {
+  font-family: var(--font-urdu);
+  font-weight: 400;
+  line-height: 2.1;
+}
+
+/* ------------------------------------------------------------------
+   Typography helpers
+------------------------------------------------------------------- */
+.display {
+  font-family: var(--font-display);
+  font-weight: 400;
+  letter-spacing: -0.015em;
+  color: var(--color-ivory);
+}
+.display em {
+  font-style: italic;
+  font-weight: 300;
+}
+.t-hero {
+  font-size: clamp(3.1rem, 7.4vw, 7.4rem);
+  line-height: 1;
+}
+.t-section {
+  font-size: clamp(2.5rem, 5.2vw, 5rem);
+  line-height: 1.04;
+  text-wrap: balance;
+}
+.t-lead {
+  font-size: clamp(1.75rem, 3.4vw, 3.4rem);
+  line-height: 1.14;
+  text-wrap: pretty;
+}
+.t-title {
+  font-size: clamp(1.7rem, 2.6vw, 2.5rem);
+  line-height: 1.12;
+}
+.t-label {
+  font-family: var(--font-sans);
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+
+/* Masked line reveals need room for descenders (italic g, y, p). */
+.split-line-mask {
+  padding-bottom: 0.16em;
+  margin-bottom: -0.16em;
+  padding-top: 0.04em;
+}
+
+/* Animated underline link */
+.link-line {
+  position: relative;
+  display: inline-block;
+  color: var(--color-ivory);
+}
+.link-line::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -0.2em;
+  height: 1px;
+  background: currentColor;
+  transform-origin: right;
+  transform: scaleX(0.28);
+  opacity: 0.55;
+  transition:
+    transform 0.8s var(--ease-lux),
+    opacity 0.8s var(--ease-lux);
+}
+.link-line:hover::after,
+.link-line:focus-visible::after {
+  transform-origin: left;
+  transform: scaleX(1);
+  opacity: 1;
+}
+
+/* Quiet variant: no resting underline (footer, dense lists) */
+.link-line.link-quiet {
+  color: inherit;
+}
+.link-line.link-quiet::after {
+  transform-origin: right;
+  transform: scaleX(0);
+  opacity: 1;
+}
+.link-line.link-quiet:hover::after,
+.link-line.link-quiet:focus-visible::after {
+  transform-origin: left;
+  transform: scaleX(1);
+}
+}
+
+/* ------------------------------------------------------------------
+   Reveal system. Elements start hidden only when JS is running and the
+   visitor has not asked for reduced motion; GSAP then animates them in.
+   `.no-anim` is a fail-safe added if the animation layer never starts.
+------------------------------------------------------------------- */
+html.js:not(.no-anim) [data-reveal],
+html.js:not(.no-anim) [data-stagger] > *,
+html.js:not(.no-anim) [data-hero],
+html.js:not(.no-anim) [data-hero-title],
+html.js:not(.no-anim) [data-split],
+html.js:not(.no-anim) [data-lit-wrap],
+html.js:not(.no-anim) [data-nav] {
+  opacity: 0;
+}
+/* Hero arches: photo is revealed from the bottom, lines draw in. */
+html.js:not(.no-anim) [data-hero-photo] {
+  clip-path: inset(100% 0 0 0);
+}
+html.js:not(.no-anim) .arch-line {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html.js [data-reveal],
+  html.js [data-stagger] > *,
+  html.js [data-hero],
+  html.js [data-hero-title],
+  html.js [data-split],
+  html.js [data-nav] {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+  html.js [data-hero-photo] {
+    clip-path: none !important;
+  }
+  html.js .arch-line {
+    stroke-dasharray: none !important;
+    stroke-dashoffset: 0 !important;
+  }
+}
+
+/* ------------------------------------------------------------------
+   Intro curtain
+------------------------------------------------------------------- */
+.intro {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-intro);
+  display: none;
+  place-items: center;
+  background: var(--color-ink);
+}
+html.js:not(.intro-seen):not(.no-anim) .intro {
+  display: grid;
+}
+@media (prefers-reduced-motion: reduce) {
+  html.js .intro {
+    display: none !important;
+  }
+}
+/* Seal pieces start hidden inside the intro; MotionProvider draws them in. */
+html.js:not(.no-anim) .intro .seal-line {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+}
+html.js:not(.no-anim) .intro .seal-panel,
+html.js:not(.no-anim) .intro .seal-key,
+html.js:not(.no-anim) .intro .seal-letter,
+html.js:not(.no-anim) .intro .seal-rule,
+html.js:not(.no-anim) .intro .seal-lp,
+html.js:not(.no-anim) .intro [data-intro-urdu] {
+  opacity: 0;
+}
+
+/* ------------------------------------------------------------------
+   Photography treatment: desaturated, tinted into the green palette
+------------------------------------------------------------------- */
+.photo {
+  isolation: isolate;
+}
+.photo img {
+  filter: grayscale(0.85) contrast(1.06) brightness(0.9);
+}
+/* Colour blend pulls every photograph toward the palette's library green */
+.photo::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background: #234f40;
+  mix-blend-mode: color;
+  opacity: 0.6;
+}
+.photo::after {
+  z-index: 2;
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(to top, rgb(10 21 18 / 0.78), rgb(10 21 18 / 0) 55%),
+    rgb(15 32 27 / 0.38);
+}
+
+@layer components {
+/* ------------------------------------------------------------------
+   Forms
+------------------------------------------------------------------- */
+.field {
+  width: 100%;
+  appearance: none;
+  background: transparent;
+  border: 0;
+  border-bottom: 1px solid var(--color-line-strong);
+  border-radius: 0;
+  padding: 0.65rem 0 0.8rem;
+  font: inherit;
+  font-size: 1.0625rem;
+  line-height: 1.5;
+  color: var(--color-ivory);
+  transition: border-color 0.7s var(--ease-lux);
+}
+.field::placeholder {
+  color: rgb(169 177 166 / 0.78);
+}
+.field:hover {
+  border-bottom-color: rgb(237 232 220 / 0.45);
+}
+.field:focus {
+  outline: none;
+  border-bottom-color: var(--color-gilt);
+}
+.field[aria-invalid="true"] {
+  border-bottom-color: var(--color-coral);
+}
+select.field option {
+  background: var(--color-forest);
+  color: var(--color-ivory);
+}
+textarea.field {
+  resize: none;
+  min-height: 7.5rem;
+}
+
+}
+
+.no-scrollbar {
+  scrollbar-width: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.fade-up {
+  animation: fade-up 0.9s var(--ease-expo) both;
+}
+
+@keyframes sweep {
+  0% {
+    transform: translateX(-101%);
+  }
+  100% {
+    transform: translateX(101%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
